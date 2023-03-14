@@ -15,6 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users','id');
             $table->dateTime('date')->nullable();
             $table->text('description')->nullable();
             $table->integer('amount')->nullable();
@@ -29,6 +30,10 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
+        
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
         Schema::dropIfExists('transactions');
     }
 }

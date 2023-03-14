@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -15,11 +16,12 @@ class TransactionController extends Controller
      */
     public function index($id = null)
     {
+        $userId = Auth::id();
         if($id){
-            $transactions = Transaction::where('category_id',$id)->get();
+            $transactions = Transaction::where(['category_id'=>$id,'user_id'=>$userId])->get();
         }
         else{
-            $transactions = Transaction::all();
+            $transactions = Transaction::where(['user_id'=>$userId])->get();
         }
         return view('transactions.index',compact('transactions'));
     }
@@ -46,7 +48,7 @@ class TransactionController extends Controller
         $request->validate([
             'description'=>'required',
             'category_id'=>'required',
-            'amount'=>'required|integer'
+            'amount'=>'required|numeric'
         ]);
         
         Transaction::create($request->all());
