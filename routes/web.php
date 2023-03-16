@@ -19,16 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('login',function(){
-    echo "login page";
-})->name('login');
-
-Route::post('logout',function(){
-    Auth::logout();    
-})->name('logout');
-
 
 Route::group(['middleware'=>'auth'],function(){
     Route::get('/transactions/{id?}',[TransactionController::class,'index']);
     Route::post('/transactions',[TransactionController::class,'store']);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
