@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\App;
 
 class CreatePersonalAccessTokensTable extends Migration
 {
@@ -13,6 +14,11 @@ class CreatePersonalAccessTokensTable extends Migration
      */
     public function up()
     {
+        if (App::environment() === 'production') {
+            // Prevent running migrations in production environment
+            return;
+        }
+
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->morphs('tokenable');
@@ -31,6 +37,11 @@ class CreatePersonalAccessTokensTable extends Migration
      */
     public function down()
     {
+        if (App::environment() === 'production') {
+            // Prevent running migrations in production environment
+            return;
+        }
+
         Schema::dropIfExists('personal_access_tokens');
     }
 }

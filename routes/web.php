@@ -19,14 +19,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware'=>'auth'],function(){
-    Route::get('/transactions/{id?}',[TransactionController::class,'index']);
-    Route::post('/transactions',[TransactionController::class,'store']);
+Route::group(['middleware'=>'auth','prefix'=>'transactions'],function(){
+    
+    Route::get('create',[TransactionController::class,'create'])->name('transactions.create');
+    Route::get('{transaction}/edit',[TransactionController::class,'edit'])->name('transactions.edit');
+    Route::get('{id?}',[TransactionController::class,'index'])->name('transactions.index');
+    Route::post('',[TransactionController::class,'store'])->name('transactions.store');
+    Route::put('{transaction}',[TransactionController::class,'update'])->name('transactions.update');
+    Route::delete('{transaction}',[TransactionController::class,'destroy'])->name('transactions.delete');
+    
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 

@@ -57,7 +57,7 @@ class ViewTransactionsTest extends TestCase
             'user_id'=>$this->user->id
             ]);
 
-        $otherTransaction = Transaction::factory()->create();
+        $otherTransaction = Transaction::factory()->create(['user_id'=>$this->user->id]);
 
         $this->get("/transactions/{$category->id}")
         ->assertSee($transaction->description)

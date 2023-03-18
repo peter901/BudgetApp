@@ -10,17 +10,13 @@ use Tests\TestCase;
 class CreateTransactionsTest extends TestCase
 {
     
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function test_can_create_transaction()
     {
         $transaction = Transaction::factory()->make(['user_id'=>$this->user->id]);
 
         $this->post('/transactions',$transaction->toArray())
-        ->assertRedirect('/transactions');
+        ->assertRedirect('/transactions')
+        ->assertSessionHas('status');
 
         $this->get('/transactions')
         ->assertSee($transaction->description);
@@ -31,7 +27,7 @@ class CreateTransactionsTest extends TestCase
         $transaction = Transaction::factory()->make(['description'=>null]);
 
         $this->post('/transactions',$transaction->toArray())
-        ->assertSessionHasErrors(['description']);
+        ->assertSessionHasErrors('description');
     }
 
     public function test_cannot_create_transaction_without_category_id(){
